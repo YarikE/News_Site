@@ -1,2 +1,4 @@
 # News_Site
-admin: root
+Admin: 
+login: root
+password: 1234
