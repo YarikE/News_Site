@@ -1,0 +1,38 @@
+{% extends 'women/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<ul class="list-articles">
+	{% for p in posts %}
+			<li>
+				<div class="article-panel">
+					<p class="first">Категория: {{p.cat}}</p>
+					<p class="last">Дата: {{p.time_update|date:"d-m-Y H:i:s"}}</p>
+				</div>
+
+				{% if p.photo %}
+					<p><img class="img-article-left thumb" src="{{p.photo.url}}"></p>
+				{% endif %}
+
+				<h2><a href="{% url 'post' p.pk %}">{{p.title}}</a></h2>
+
+					<div class="counter" data-counter>
+						<div class="counter__button counter__button_minus">-</div>
+							<div class="counter__input">
+								<input type="text" disabled placeholder="0">
+							</div>
+						<img src="{% static 'women/images/like.png' %}" width="30" height="30">
+						<div class="counter__button counter__button_plus">+</div>
+					</div>
+
+	{% autoescape on %}
+	{{p.content|linebreaks|truncatewords:50}}
+	{% endautoescape %}
+			<div class="clear"></div>
+			<p class="link-read-post"><a href="{% url 'post' p.pk %}">Читать пост</a></p>
+			</li>
+	{% endfor %}
+
+</ul>
+{% endblock %}
