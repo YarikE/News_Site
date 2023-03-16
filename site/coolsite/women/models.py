@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -10,14 +11,24 @@ class Women(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
-    likes = models.IntegerField(null=True)
+    #likes = models.IntegerField(null=True)
 
-    def add_like(self):
-        self.likes+=1
-        self.save()
+    @property
+    def like_count(self):
+        return self.likes.filter(value=1).count()
 
-    def add_like_dict(self):
-        return {"id":self.id,"likes":self.likes}
+    def add_like(self,user):
+
+        like = Likes.objects.get_or_create(post=self,user=user)[0]
+        if like.value:
+            like.value=0
+        else:
+            like.value=1
+        like.save()
+
+
+    def dict(self):
+        return {"id":self.id,"likes_count":self.like_count}
     # def __str__(self):
     #     return self.title
 
@@ -35,3 +46,10 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('category', kwargs={'cat_id': self.pk})
+
+class Likes(models.Model):
+    value = models.IntegerField(default=0)
+    user = models.ForeignKey(User,related_name='+',on_delete=models.CASCADE)
+    post = models.ForeignKey(Women,related_name='likes',on_delete=models.CASCADE)
+
+

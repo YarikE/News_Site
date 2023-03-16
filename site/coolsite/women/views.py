@@ -78,7 +78,7 @@ def show_category(request, cat_id):
     posts = Women.objects.filter(cat_id=cat_id)
     cats = Category.objects.all()
 
-    if len(posts) == 0:
+    if posts.count() == 0:
         raise Http404()
 
     context = {
@@ -137,8 +137,8 @@ def update_data(request):
     return JsonResponse(data)
 
 def set_like(request:WSGIRequest):
-    if request.method =='POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         data = json.loads(request.body)
-        item = Women.objects.get(data['id'])
-        item.add_like()
-        return JsonResponse(item.like_dict())
+        item = Women.objects.get(id=data['id'])
+        item.add_like(request.user)
+        return JsonResponse(item.dict())
