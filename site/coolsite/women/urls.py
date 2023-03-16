@@ -10,5 +10,7 @@ urlpatterns = [
     path("login/", login, name="login"),
     path("post/<int:post_id>/", show_post, name="post"),
     path('category/<int:cat_id>/', show_category, name='category'),
-    path('api/v1/newslist/', WomenAPIView.as_view())
+    path('api/v1/newslist/', WomenAPIView.as_view()),
+    path('update-data/', update_data, name='update-data'),
+    path('set-like/', set_like, name='set-like'),
 ]

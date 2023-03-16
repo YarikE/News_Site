@@ -7,6 +7,10 @@
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 			<link rel="shortcut icon" href="{% static 'women/images/main.ico' %}" type="image/x-icon"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<script>
+				var csrf_token = "{{csrf_token}}"
+			</script>
+
 		</head>
 		<body>
 
@@ -73,8 +77,57 @@
 			</td></tr>
 			</table>
 			<!-- Конец footer'а и страницы -->
-			<script type="text/javascript" src={% static "women/js/script.js" %}></script>
 		</body>
+	<script type="text/javascript" src={% static "women/js/script.js" %}></script>
+		<script>
+			async function addLike(id,element){
+   					var res = await  postData('/set-like/',{id:id})
+   					console.log(res)
+			}
+
+document.querySelectorAll(".btn-like-add").addEventListener('click',(e)=>{
+    debugger
+})
+async function postData(url = "", data = {}) {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, *same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      'X-CSRFToken': csrf_token
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
+}
+
+function post(url,data,onSuccess){
+var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 20fetch example
+    0) {
+
+
+      var responseObj = JSON.parse(this.responseText);
+      onSuccess(responseObj)
+
+    }
+  };
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader("X-CSRFToken",csrf_token)
+  xhttp.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+  xhttp.send(JSON.stringify(data));
+
+  }
+
+		</script>
 	</html>
 
 

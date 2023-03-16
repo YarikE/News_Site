@@ -1,4 +1,8 @@
+import json
+
+from django.core.handlers.wsgi import WSGIRequest
 from django.forms import model_to_dict
+#from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -110,3 +114,31 @@ class WomenAPIView(APIView):
             photo=request.data['photo']
         )
         return Response({'post': model_to_dict(post_new)})
+
+
+def update_data(request):
+    # Получение значения из POST-запроса
+    type = request.POST.get('type')
+
+    # Обновление значений в базе данных
+    women_for_like = Women.objects.get(id=1)
+    if type == 'like':
+        women_for_like.likes += 1
+    else:
+        women_for_like.likes -= 1
+    women_for_like.save()
+
+    # Получение обновленных значений из базы данных
+    article = Women.objects.get(id=1)
+    data = {
+        'likes': article.likes,
+    }
+    # Возврат числа лайков или дизлайков в качестве ответа на запрос
+    return JsonResponse(data)
+
+def set_like(request:WSGIRequest):
+    if request.method =='POST':
+        data = json.loads(request.body)
+        item = Women.objects.get(data['id'])
+        item.add_like()
+        return JsonResponse(item.like_dict())

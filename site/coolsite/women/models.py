@@ -12,8 +12,14 @@ class Women(models.Model):
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
     likes = models.IntegerField(null=True)
 
-    def __str__(self):
-        return self.title
+    def add_like(self):
+        self.likes+=1
+        self.save()
+
+    def add_like_dict(self):
+        return {"id":self.id,"likes":self.likes}
+    # def __str__(self):
+    #     return self.title
 
     class Meta:
         verbose_name = 'Новости :)'
