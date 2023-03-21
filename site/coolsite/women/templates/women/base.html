@@ -7,6 +7,7 @@
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 			<link rel="shortcut icon" href="{% static 'women/images/main.ico' %}" type="image/x-icon"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<script type="text/javascript" src={% static "women/js/script.js" %} defer></script>
 		</head>
 		<body>
 
@@ -73,7 +74,11 @@
 			</td></tr>
 			</table>
 			<!-- Конец footer'а и страницы -->
-			<script type="text/javascript" src={% static "women/js/script.js" %}></script>
+
+
+			<script>
+				var csrf = '{{csrf_token}}'
+			</script>
 		</body>
 	</html>
 

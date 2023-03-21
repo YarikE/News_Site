@@ -443,3 +443,9 @@ ul.lang-list li a:hover {color: #fdc073;}
   border: none;
   text-align: center;
 }
+
+button {
+    background: #fff; /* Синий цвет фона */
+    color: #000000; /* Белый цвет текста */
+    border: none;
+}

@@ -1,34 +1,45 @@
-const counters = document.querySelectorAll('[data-counter]');
+const Buttons_plus = document.querySelectorAll(".lp");
+const Buttons_minus = document.querySelectorAll(".lm");
 
-if (counters) {
-	counters.forEach(counter => {
-		counter.addEventListener('click', e => {
-			const target = e.target;
 
-			if (target.closest('.counter__button')) {
-				if (target.closest('.counter').querySelector('input').value == '' && (target.classList.contains('counter__button_minus') || target.classList.contains('counter__button_plus'))) {
-					target.closest('.counter').querySelector('input').value = 0;
-				}
+Buttons_plus.forEach(button_plus => {
+button_plus.addEventListener("click", async function() {
+  fetch(`http://127.0.0.1:8000/likes-plus/${button_plus.id}/`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({'data': 'myData'})
+})
+    .then(response => response.json())
+    .then(data => {
+        let likesCount = data.likes_count
+        let ID = data.id
+        const currentElem = document.querySelector(`.like${ID}`)
+        currentElem.innerHTML = likesCount
+    })
+    .catch(error => console.error(error));
+})
+});
 
-				let value = parseInt(target.closest('.counter').querySelector('input').value);
 
-				if (target.classList.contains('counter__button_plus')) {
-					value++;
-				} else {
-					--value;
-				}
+Buttons_minus.forEach(button_minus => {
+button_minus.addEventListener("click", async function() {
+  fetch(`http://127.0.0.1:8000/likes-minus/${button_minus.id}/`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({'data': 'myData'})
+})
+    .then(response => response.json())
+    .then(data => {
+        let likesCount = data.likes_count
+        let ID = data.id
+        const currentElem = document.querySelector(`.like${ID}`)
+        currentElem.innerHTML = likesCount
+    })
+    .catch(error => console.error(error));
+});
+});
 
-				if (value <= 0) {
-					value = 0;
-					target.closest('.counter').querySelector('.counter__button_minus').classList.remove('disabled')
-				}
-				if (value >= 1){
-				    value = 1;
-					target.closest('.counter').querySelector('.counter__button_minus').classList.remove('disabled')
-				}
-
-				target.closest('.counter').querySelector('input').value = value;
-			}
-		})
-	})	
-}

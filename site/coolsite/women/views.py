@@ -1,4 +1,5 @@
 from django.forms import model_to_dict
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -110,3 +111,55 @@ class WomenAPIView(APIView):
             photo=request.data['photo']
         )
         return Response({'post': model_to_dict(post_new)})
+
+
+# Функция представления для "+ лайка"
+@csrf_exempt
+def likes_plus_update(request, post_id):
+    if request.method == 'POST':
+        data_bd = Women.objects.get(id=post_id)
+        data_bd.likes += 1
+        data_bd.save()
+        data = {
+            'id': data_bd.id,
+            'title': data_bd.title,
+            'content': data_bd.content,
+            'likes_count': data_bd.likes
+        }
+        return JsonResponse(data)
+
+# Функция представления для "- лайка"
+@csrf_exempt
+def likes_minus_update(request, post_id):
+    if request.method == 'POST':
+        data_bd = Women.objects.get(id=post_id)
+        data_bd.likes -= 1
+        data_bd.save()
+
+        data = {
+            'id': data_bd.id,
+            'title': data_bd.title,
+            'content': data_bd.content,
+            'likes_count': data_bd.likes
+        }
+        return JsonResponse(data)
+
+
+# Request for scroll
+@csrf_exempt
+def scroll_data(request, post_id):
+    if request.method == 'POST':
+        data_db = Women.objects.get(id=post_id)
+        data = {
+            'id': data_db.id,
+            'title': data_db.title,
+            'content': data_db.content,
+            'time_update': data_db.time_update,
+            'is_published': data_db.is_published,
+            'time_create': data_db.time_create,
+            'cat_id': data_db.cat_id,
+            'likes': data_db.likes
+        }
+        return JsonResponse(data)
+
+

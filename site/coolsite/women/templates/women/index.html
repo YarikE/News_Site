@@ -18,12 +18,22 @@
 				<h2><a href="{% url 'post' p.pk %}">{{p.title}}</a></h2>
 
 					<div class="counter" data-counter>
-						<div class="counter__button counter__button_minus">-</div>
-							<div class="counter__input">
-								<input type="text" disabled placeholder="0">
-							</div>
+
+
+						<div class="counter__button counter__button_minus">
+							<button id="{{p.id}}" class="lm">-</button>
+						</div>
+
+						<div class="like{{p.id}}">
+							{{p.likes}}
+						</div>
+
 						<img src="{% static 'women/images/like.png' %}" width="30" height="30">
-						<div class="counter__button counter__button_plus">+</div>
+
+						<div class="counter__button counter__button_plus">
+							<button id="{{p.id}}" class="lp">+</button>
+						</div>
+
 					</div>
 
 	{% autoescape on %}
@@ -33,6 +43,7 @@
 			<p class="link-read-post"><a href="{% url 'post' p.pk %}">Читать пост</a></p>
 			</li>
 	{% endfor %}
+	<script type="text/javascript" src={% static "women/js/scroll.js" %} defer>></script>
 
 </ul>
 {% endblock %}
